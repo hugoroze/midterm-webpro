@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Modifier la Tâche
+            Edit Task
         </h2>
     </x-slot>
 
@@ -12,12 +12,12 @@
                 @method('PUT')
 
                 <div>
-                    <label class="block text-sm font-medium">Titre</label>
+                    <label class="block text-sm font-medium">Title</label>
                     <input type="text" name="title" value="{{ $task->title }}" required class="border rounded px-3 py-2 w-full">
                 </div>
 
                 <div>
-                    <label class="block text-sm font-medium">Catégorie</label>
+                    <label class="block text-sm font-medium">Category</label>
                     <select name="category_id" required class="border rounded px-3 py-2 w-full">
                         @foreach($categories as $category)
                             <option value="{{ $category->id }}" {{ $task->category_id == $category->id ? 'selected' : '' }}>
@@ -33,13 +33,13 @@
                 </div>
 
                 <div>
-                    <label class="block text-sm font-medium">Date d'échéance</label>
+                    <label class="block text-sm font-medium">Due Date</label>
                     <input type="date" name="due_date" value="{{ $task->due_date }}" class="border rounded px-3 py-2 w-full">
                 </div>
 
                 <div class="flex justify-end gap-2">
-                    <a href="{{ route('tasks.index') }}" class="bg-gray-300 px-4 py-2 rounded">Annuler</a>
-                    <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded">Enregistrer</button>
+                    <a href="{{ route('tasks.index') }}" class="bg-gray-300 px-4 py-2 rounded">Cancel</a>
+                    <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded">Save</button>
                 </div>
             </form>
         </div>

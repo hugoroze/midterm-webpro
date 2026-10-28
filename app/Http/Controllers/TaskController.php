@@ -9,26 +9,21 @@ use Illuminate\Support\Facades\Auth;
 
 class TaskController extends Controller
 {
-    // Fonctionnalités 2, 5, 9 et 10 : Liste, Recherche, Filtre et Statistiques
     public function index(Request $request)
     {
         $categories = Category::all();
-
         $query = Task::with('category')->where('user_id', Auth::id());
 
-        // Recherche par mot-clé
         if ($request->filled('search')) {
             $query->where('title', 'like', '%' . $request->search . '%');
         }
 
-        // Filtrage par catégorie
         if ($request->filled('category_id')) {
             $query->where('category_id', $request->category_id);
         }
 
         $tasks = $query->latest()->get();
 
-        // Statistiques
         $totalTasks = Task::where('user_id', Auth::id())->count();
         $completedTasks = Task::where('user_id', Auth::id())->where('is_completed', true)->count();
         $pendingTasks = $totalTasks - $completedTasks;
@@ -44,7 +39,6 @@ class TaskController extends Controller
         ));
     }
 
-    // Fonctionnalité 4 : Créer une tâche
     public function store(Request $request)
     {
         $request->validate([
@@ -63,17 +57,15 @@ class TaskController extends Controller
             'is_completed' => false,
         ]);
 
-        return redirect()->route('tasks.index')->with('success', 'Tâche créée avec succès.');
+        return redirect()->route('tasks.index')->with('success', 'Task created successfully.');
     }
 
-    // Afficher le formulaire de modification
     public function edit(Task $task)
     {
         $categories = Category::all();
         return view('tasks.edit', compact('task', 'categories'));
     }
 
-    // Fonctionnalité 6 : Modifier une tâche
     public function update(Request $request, Task $task)
     {
         $request->validate([
@@ -90,23 +82,21 @@ class TaskController extends Controller
             'due_date' => $request->due_date,
         ]);
 
-        return redirect()->route('tasks.index')->with('success', 'Tâche mise à jour.');
+        return redirect()->route('tasks.index')->with('success', 'Task updated successfully.');
     }
 
-    // Fonctionnalité 8 : Basculer le statut (Terminée / En cours)
     public function toggle(Task $task)
     {
         $task->update([
             'is_completed' => !$task->is_completed
         ]);
 
-        return redirect()->route('tasks.index')->with('success', 'Statut de la tâche modifié.');
+        return redirect()->route('tasks.index')->with('success', 'Task status updated.');
     }
 
-    // Fonctionnalité 7 : Supprimer une tâche
     public function destroy(Task $task)
     {
         $task->delete();
-        return redirect()->route('tasks.index')->with('success', 'Tâche supprimée.');
+        return redirect()->route('tasks.index')->with('success', 'Task deleted.');
     }
 }
